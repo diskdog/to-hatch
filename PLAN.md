@@ -1,5 +1,4 @@
 # To Hatch — Task Manager
-
 ## Scope
 - Create, edit, complete, delete tasks
 - Due date and priority fields
@@ -7,23 +6,23 @@
 - Kanban board: Nest (to do), Hatching (in progress), Flown the Pond (done)
 - Egg-themed task cards, colour-coded by priority
 - Task emoji evolves by column: 🥚 in Nest, 🐣 in Hatching, 🦆 in Flown the Pond
-- Unit tests for core operations
-- Filter and sort (stretch)
+- Tests for core CRUD operations
 
 ## Stack
-- Python 3.12 / FastAPI
+- Python 3.10+ / FastAPI
 - SQLite for persistence
 - Jinja2 templates + vanilla HTML/CSS for frontend
-- pytest for testing
+- pytest + httpx TestClient for testing
 - No frontend framework; server-rendered
 
 ## Architecture
 - main.py: FastAPI app, routes
-- database.py: SQLite connection and CRUD operations (hatch.db)
+- database.py: SQLite CRUD operations (hatch.db), function-scoped connections via context managers
 - models.py: Pydantic models for Task
 - templates/: Jinja2 HTML templates
 - static/: CSS
 - tests/: pytest test suite
+- requirements.txt: pinned dependencies
 
 ## Data Model
 - Task status values: 'nest', 'hatching', 'flown' (CHECK constraint at DB level)
@@ -36,8 +35,12 @@
 2. CRUD routes + basic HTML template (mins 7–13)
 3. Kanban board layout (mins 13–20)
 4. Egg visuals + theming (mins 20–24)
-5. Unit tests (mins 24–27)
+5. Integration tests (mins 24–27)
 6. Self-review (mins 27–30)
+
+## Development Practices
+- Code style: Google Python Style Guide (type annotations, Google-style docstrings, proper imports)
+- Commit style: Beams' seven rules (imperative mood, 50-char subject, 72-char body wrap)
 
 ## Non-Functional Requirements
 - Input validation: Pydantic enforces type and field constraints on all inputs
@@ -49,10 +52,10 @@
 
 ## Deferred
 - Drag-and-drop (JS complexity, not worth the time)
+- Filter/sort (stretch if time permits after tests)
 - Calendar integration
 - Authentication
 - Docker containerisation
-- Filter/sort (stretch if time permits after tests)
 
 ## Definition of Done
 - App runs locally on uvicorn
