@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Hatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
@@ -17,7 +18,7 @@
         <form action="/tasks" method="post" class="form-row">
           <div class="form-group">
             <label for="title">Title</label>
-            <input type="text" id="title" name="title" required />
+            <input type="text" id="title" name="title" required placeholder="What are you hatching today?" />
           </div>
           <div class="form-group">
             <label for="priority">Priority</label>
@@ -42,7 +43,7 @@
           <div class="card-list">
             {% for task in tasks if task.status == 'nest' %}
             <article class="card priority-{{ task.priority }}">
-              <h3 class="card-title">{{ task.title }}</h3>
+              <h3 class="card-title">🥚 {{ task.title }}</h3>
               <dl class="card-meta">
                 <dt>Priority</dt>
                 <dd>{{ task.priority }}</dd>
@@ -71,7 +72,7 @@
           <div class="card-list">
             {% for task in tasks if task.status == 'hatching' %}
             <article class="card priority-{{ task.priority }}">
-              <h3 class="card-title">{{ task.title }}</h3>
+              <h3 class="card-title">🐣 {{ task.title }}</h3>
               <dl class="card-meta">
                 <dt>Priority</dt>
                 <dd>{{ task.priority }}</dd>
@@ -104,7 +105,7 @@
           <div class="card-list">
             {% for task in tasks if task.status == 'flown' %}
             <article class="card priority-{{ task.priority }}">
-              <h3 class="card-title">{{ task.title }}</h3>
+              <h3 class="card-title">🦆 {{ task.title }}</h3>
               <dl class="card-meta">
                 <dt>Priority</dt>
                 <dd>{{ task.priority }}</dd>
