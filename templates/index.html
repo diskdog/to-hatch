@@ -4,8 +4,131 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>To Hatch</title>
+    <link rel="stylesheet" href="/static/style.css" />
   </head>
   <body>
-    <h1>To Hatch</h1>
+    <header class="site-header">
+      <h1>To Hatch</h1>
+    </header>
+
+    <main>
+      <section class="task-form" aria-label="Add a new task">
+        <h2>New Task</h2>
+        <form action="/tasks" method="post" class="form-row">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required />
+          </div>
+          <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="due_date">Due Date</label>
+            <input type="date" id="due_date" name="due_date" />
+          </div>
+          <button type="submit" class="btn">Add Task</button>
+        </form>
+      </section>
+
+      <div class="board" role="region" aria-label="Kanban board">
+
+        <section class="column" aria-label="Nest">
+          <h2 class="column-header">Nest</h2>
+          <div class="card-list">
+            {% for task in tasks if task.status == 'nest' %}
+            <article class="card priority-{{ task.priority }}">
+              <h3 class="card-title">{{ task.title }}</h3>
+              <dl class="card-meta">
+                <dt>Priority</dt>
+                <dd>{{ task.priority }}</dd>
+                {% if task.due_date %}
+                <dt>Due</dt>
+                <dd>{{ task.due_date }}</dd>
+                {% endif %}
+              </dl>
+              <div class="card-actions">
+                <a href="/tasks/{{ task.id }}/edit" class="btn">Edit</a>
+                <form action="/tasks/{{ task.id }}/delete" method="post">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+                <form action="/tasks/{{ task.id }}/move" method="post">
+                  <input type="hidden" name="direction" value="forward" />
+                  <button type="submit" class="btn btn-move">&#8594; Hatching</button>
+                </form>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="column" aria-label="Hatching">
+          <h2 class="column-header">Hatching</h2>
+          <div class="card-list">
+            {% for task in tasks if task.status == 'hatching' %}
+            <article class="card priority-{{ task.priority }}">
+              <h3 class="card-title">{{ task.title }}</h3>
+              <dl class="card-meta">
+                <dt>Priority</dt>
+                <dd>{{ task.priority }}</dd>
+                {% if task.due_date %}
+                <dt>Due</dt>
+                <dd>{{ task.due_date }}</dd>
+                {% endif %}
+              </dl>
+              <div class="card-actions">
+                <a href="/tasks/{{ task.id }}/edit" class="btn">Edit</a>
+                <form action="/tasks/{{ task.id }}/delete" method="post">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+                <form action="/tasks/{{ task.id }}/move" method="post">
+                  <input type="hidden" name="direction" value="back" />
+                  <button type="submit" class="btn btn-move-back">&#8592; Nest</button>
+                </form>
+                <form action="/tasks/{{ task.id }}/move" method="post">
+                  <input type="hidden" name="direction" value="forward" />
+                  <button type="submit" class="btn btn-move">&#8594; Flown</button>
+                </form>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="column" aria-label="Flown the Pond">
+          <h2 class="column-header">Flown the Pond</h2>
+          <div class="card-list">
+            {% for task in tasks if task.status == 'flown' %}
+            <article class="card priority-{{ task.priority }}">
+              <h3 class="card-title">{{ task.title }}</h3>
+              <dl class="card-meta">
+                <dt>Priority</dt>
+                <dd>{{ task.priority }}</dd>
+                {% if task.due_date %}
+                <dt>Due</dt>
+                <dd>{{ task.due_date }}</dd>
+                {% endif %}
+              </dl>
+              <div class="card-actions">
+                <a href="/tasks/{{ task.id }}/edit" class="btn">Edit</a>
+                <form action="/tasks/{{ task.id }}/delete" method="post">
+                  <button type="submit" class="btn btn-delete">Delete</button>
+                </form>
+                <form action="/tasks/{{ task.id }}/move" method="post">
+                  <input type="hidden" name="direction" value="back" />
+                  <button type="submit" class="btn btn-move-back">&#8592; Hatching</button>
+                </form>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+
+      </div>
+    </main>
   </body>
 </html>

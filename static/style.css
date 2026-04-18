@@ -1,0 +1,227 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f0f0f0;
+  color: #222;
+}
+
+/* Header */
+.site-header {
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+main {
+  padding: 1.5rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* Task creation form */
+.task-form {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-form h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Kanban board */
+.board {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+  background: #e4e4e4;
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.column-header {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ccc;
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Task cards */
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-left: 4px solid #999;
+  border-radius: 4px;
+  padding: 0.75rem;
+}
+
+.card.priority-high {
+  border-left-color: #c53030;
+}
+
+.card.priority-medium {
+  border-left-color: #c05621;
+}
+
+.card.priority-low {
+  border-left-color: #2b6cb0;
+}
+
+.card-title {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.card-meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.4rem;
+  row-gap: 0.1rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: #555;
+}
+
+.card-meta dt {
+  font-weight: 600;
+}
+
+.card-meta dd {
+  margin: 0;
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.card-actions form {
+  display: contents;
+}
+
+/* Buttons */
+.btn,
+.btn-delete,
+.btn-move,
+.btn-move-back {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  background: #f7f7f7;
+  color: #222;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.btn:hover,
+.btn-delete:hover,
+.btn-move:hover,
+.btn-move-back:hover {
+  background: #ececec;
+}
+
+.btn-delete {
+  border-color: #c53030;
+  color: #c53030;
+}
+
+.btn-delete:hover {
+  background: #fff5f5;
+}
+
+.btn-move {
+  border-color: #2b6cb0;
+  color: #2b6cb0;
+}
+
+.btn-move:hover {
+  background: #ebf4ff;
+}
+
+.btn-move-back {
+  border-color: #999;
+  color: #555;
+}
+
+.btn-move-back:hover {
+  background: #e8e8e8;
+}
+
+/* Responsive: stack columns vertically on narrow screens */
+@media (max-width: 768px) {
+  .board {
+    flex-direction: column;
+  }
+
+  .column {
+    width: 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-row .btn {
+    align-self: flex-start;
+  }
+}
