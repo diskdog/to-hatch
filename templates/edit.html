@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Task — To Hatch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>To Hatch</h1>
+    </header>
+
+    <main>
+      <section class="task-form" aria-label="Edit task">
+        <h2>Edit Task</h2>
+        <form action="/tasks/{{ task.id }}/edit" method="post" class="form-row">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" value="{{ task.title }}" required />
+          </div>
+          <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" name="priority">
+              <option value="low" {% if task.priority == 'low' %}selected{% endif %}>Low</option>
+              <option value="medium" {% if task.priority == 'medium' %}selected{% endif %}>Medium</option>
+              <option value="high" {% if task.priority == 'high' %}selected{% endif %}>High</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="due_date">Due Date</label>
+            <input type="date" id="due_date" name="due_date" value="{{ task.due_date or '' }}" />
+          </div>
+          <div class="form-group" style="flex-direction: row; gap: 0.5rem;">
+            <button type="submit" class="btn">Save</button>
+            <a href="/" class="btn">Cancel</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
