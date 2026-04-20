@@ -160,7 +160,9 @@ def update_task(task_id: str, update: TaskUpdate) -> TaskResponse:
         ValueError: If *update* contains no fields to change.
         sqlite3.DatabaseError: If the update fails.
     """
-    fields = {k: v for k, v in update.model_dump().items() if v is not None}
+    # Use model_fields_set so explicitly-passed None values (e.g. clearing
+    # due_date) are written, while truly omitted fields are skipped.
+    fields = {k: update.model_dump()[k] for k in update.model_fields_set}
     if not fields:
         raise ValueError("No fields provided for update.")
 
