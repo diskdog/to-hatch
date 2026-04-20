@@ -1,11 +1,16 @@
 """SQLite database initialisation and CRUD functions for To Hatch."""
 
+from __future__ import annotations
+
+import logging
 import sqlite3
 from contextlib import contextmanager
 from typing import Generator
 from uuid import uuid4
 
 from models import TaskCreate, TaskResponse, TaskUpdate
+
+logger = logging.getLogger(__name__)
 
 DB_PATH = "hatch.db"
 
@@ -27,12 +32,17 @@ CREATE TABLE IF NOT EXISTS tasks (
 def _get_connection() -> Generator[sqlite3.Connection, None, None]:
     """Yield a function-scoped SQLite connection and close it on exit.
 
+    WAL journal mode is enabled so reads do not block writes and the
+    database is safe for concurrent access from multiple threads.
+
     Yields:
-        An open :class:`sqlite3.Connection` with row_factory set to
-        :attr:`sqlite3.Row`.
+        An open :class:`sqlite3.Connection` with :attr:`sqlite3.Row`
+        as the row factory.
     """
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
     try:
         yield conn
     finally:
@@ -59,14 +69,18 @@ def _row_to_response(row: sqlite3.Row) -> TaskResponse:
 
 
 def init_db() -> None:
-    """Create the tasks table if it does not already exist.
+    """Create the tasks table and required indexes if they do not already exist.
 
     Raises:
-        sqlite3.DatabaseError: If the table cannot be created.
+        sqlite3.DatabaseError: If the schema cannot be created.
     """
     with _get_connection() as conn:
         conn.execute(_CREATE_TABLE_SQL)
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status)"
+        )
         conn.commit()
+    logger.debug("Database initialised at %s", DB_PATH)
 
 
 def create_task(task: TaskCreate) -> TaskResponse:
@@ -89,6 +103,7 @@ def create_task(task: TaskCreate) -> TaskResponse:
     with _get_connection() as conn:
         conn.execute(sql, (task_id, task.title, task.priority, task.due_date))
         conn.commit()
+    logger.debug("Created task %s", task_id)
     return get_task_by_id(task_id)
 
 
@@ -151,7 +166,7 @@ def update_task(task_id: str, update: TaskUpdate) -> TaskResponse:
 
     set_clause = ", ".join(f"{col} = ?" for col in fields)
     sql = f"UPDATE tasks SET {set_clause} WHERE id = ?"  # noqa: S608 — clause built from model keys, not user input
-    params = list(fields.values()) + [task_id]
+    params = [*fields.values(), task_id]
 
     with _get_connection() as conn:
         cursor = conn.execute(sql, params)
@@ -159,6 +174,7 @@ def update_task(task_id: str, update: TaskUpdate) -> TaskResponse:
         if cursor.rowcount == 0:
             raise KeyError(task_id)
 
+    logger.debug("Updated task %s fields=%s", task_id, list(fields))
     return get_task_by_id(task_id)
 
 
@@ -178,3 +194,4 @@ def delete_task(task_id: str) -> None:
         conn.commit()
         if cursor.rowcount == 0:
             raise KeyError(task_id)
+    logger.debug("Deleted task %s", task_id)
